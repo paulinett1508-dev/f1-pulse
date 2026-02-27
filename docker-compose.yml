@@ -1,0 +1,12 @@
+services:
+  f1-pulse-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: f1-pulse-dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
