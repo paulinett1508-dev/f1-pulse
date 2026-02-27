@@ -139,11 +139,22 @@ export function getLatestSession() {
 }
 
 /**
- * Fetch the most recent Race session from 2026, 2025, or 2024.
- * Falls back to any session type if no Race is found.
+ * Fetch the most recent session with real data.
+ * Prioritises 2026: first any session whose date_end is in the past (already
+ * happened), then falls back to Race sessions from 2025/2024.
  */
 export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
-  for (const year of [2026, 2025, 2024]) {
+  const now = new Date()
+
+  // 1. Try 2026 — grab the most recent session that already ended
+  const all2026 = await fetchApi<OpenF1Session>('/sessions', { year: 2026 })
+  const past2026 = all2026.filter((s) => new Date(s.date_end) <= now)
+  if (past2026.length > 0) {
+    return past2026[past2026.length - 1]
+  }
+
+  // 2. Fallback: latest Race from 2025 / 2024
+  for (const year of [2025, 2024]) {
     const races = await fetchApi<OpenF1Session>('/sessions', {
       year,
       session_type: 'Race',
@@ -152,13 +163,9 @@ export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
       return races[races.length - 1]
     }
   }
-  // Fallback: any session type
-  for (const year of [2026, 2025, 2024]) {
-    const sessions = await fetchApi<OpenF1Session>('/sessions', { year })
-    if (sessions.length > 0) {
-      return sessions[sessions.length - 1]
-    }
-  }
+
+  // 3. Last resort: any session at all
+  if (all2026.length > 0) return all2026[all2026.length - 1]
   return null
 }
 
