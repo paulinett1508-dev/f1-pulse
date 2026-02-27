@@ -139,23 +139,21 @@ export function getLatestSession() {
 }
 
 /**
- * Fetch the most recent Race session from 2024 or 2025.
+ * Fetch the most recent Race session from 2026, 2025, or 2024.
  * Falls back to any session type if no Race is found.
  */
 export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
-  // Try 2025 Race sessions first, then 2024
-  for (const year of [2025, 2024]) {
+  for (const year of [2026, 2025, 2024]) {
     const races = await fetchApi<OpenF1Session>('/sessions', {
       year,
       session_type: 'Race',
     })
     if (races.length > 0) {
-      // Return the last (most recent) race
       return races[races.length - 1]
     }
   }
-  // Fallback: any session type from 2024/2025
-  for (const year of [2025, 2024]) {
+  // Fallback: any session type
+  for (const year of [2026, 2025, 2024]) {
     const sessions = await fetchApi<OpenF1Session>('/sessions', { year })
     if (sessions.length > 0) {
       return sessions[sessions.length - 1]
