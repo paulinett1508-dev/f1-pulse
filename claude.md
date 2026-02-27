@@ -1,14 +1,12 @@
-# F1 PULSE - shadcn + Vite pronto
-Vite + shadcn UI instalado. Gere F1 Dashboard.
+# F1 Pulse - Projeto MVP
 
-## Prioridade 1: src/App.tsx
-Tabs: LIVE | TEMPORADA | PILOTO  
-Dark F1 theme.
+## Contexto
+App de telemetria F1 real-time.
 
-## Prioridade 2: src/components/dashboard/LiveTelemetry.tsx
-Lap time, posição, pneus, setores.
+## Stack (Antigravity)
+- React 19 + Vite
+- Tailwind CSS (F1 Theme: #0A0A0A e #E10600)
+- Claude Code para automação
 
-## API: https://ergast.com/api/f1/current/driverStandings.json
-
-Mock até API real:
-lapTime: "1:25.432", position: 2, tires: "Medium"
+## Objetivo Imediato
+Setup inicial da estrutura de pastas e Dashboard Skeleton.
