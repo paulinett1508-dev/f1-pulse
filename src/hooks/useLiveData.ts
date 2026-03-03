@@ -110,7 +110,7 @@ export function useLiveData(enabled = true) {
   // ── Bootstrap: fetch session + drivers ───────────────
   const bootstrap = useCallback(async () => {
     try {
-      // Prefer a recent Race session from 2024/2025 for richer telemetry data
+      // Prefer a recent session from the current season; falls back to prior years
       const recentRace = await getRecentRaceSession()
       const session = recentRace ?? (await getLatestSession())[0] ?? null
       if (!session) {

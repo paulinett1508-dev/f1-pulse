@@ -1,6 +1,6 @@
 import type { Team, Driver, Standing, Race } from '@/types/f1'
 
-// ── Teams ──────────────────────────────────────────────
+// ── Teams (2026 season — includes Cadillac) ──────────
 export const teams: Team[] = [
   { id: 'red-bull',    name: 'Red Bull Racing',   color: '#3671C6' },
   { id: 'mclaren',     name: 'McLaren',           color: '#FF8000' },
@@ -9,14 +9,15 @@ export const teams: Team[] = [
   { id: 'aston-martin',name: 'Aston Martin',      color: '#229971' },
   { id: 'alpine',      name: 'Alpine',            color: '#FF87BC' },
   { id: 'williams',    name: 'Williams',          color: '#64C4FF' },
-  { id: 'rb',          name: 'RB',                color: '#6692FF' },
-  { id: 'kick-sauber', name: 'Kick Sauber',       color: '#52E252' },
+  { id: 'racing-bulls',name: 'Racing Bulls',      color: '#6692FF' },
+  { id: 'sauber',      name: 'Sauber',            color: '#52E252' },
   { id: 'haas',        name: 'Haas F1 Team',      color: '#B6BABD' },
+  { id: 'cadillac',    name: 'Cadillac F1',       color: '#C0A44D' },
 ]
 
 const t = (id: string) => teams.find((team) => team.id === id)!
 
-// ── Drivers ────────────────────────────────────────────
+// ── Drivers (2026 season) ─────────────────────────────
 export const drivers: Driver[] = [
   { id: 'VER', name: 'Max Verstappen',    number: 1,  team: 'red-bull',     country: 'NED' },
   { id: 'NOR', name: 'Lando Norris',      number: 4,  team: 'mclaren',      country: 'GBR' },
@@ -30,28 +31,28 @@ export const drivers: Driver[] = [
   { id: 'GAS', name: 'Pierre Gasly',      number: 10, team: 'alpine',       country: 'FRA' },
 ]
 
-// ── Standings (mock classificação atual) ───────────────
+// ── Standings (mock — início de temporada, sem pontos) ─
 export const standings: Standing[] = [
-  { position: 1,  driver: drivers[0], team: t('red-bull'),     points: 161, wins: 4, lastLapTime: '1:31.045', gap: 'LEADER',  isFastestLap: false },
-  { position: 2,  driver: drivers[1], team: t('mclaren'),      points: 138, wins: 2, lastLapTime: '1:31.198', gap: '+0.153',  isFastestLap: false },
-  { position: 3,  driver: drivers[2], team: t('ferrari'),      points: 128, wins: 2, lastLapTime: '1:30.917', gap: '+0.402',  isFastestLap: true },
-  { position: 4,  driver: drivers[3], team: t('mclaren'),      points: 112, wins: 1, lastLapTime: '1:31.334', gap: '+0.712',  isFastestLap: false },
-  { position: 5,  driver: drivers[4], team: t('ferrari'),      points: 105, wins: 1, lastLapTime: '1:31.501', gap: '+1.045',  isFastestLap: false },
-  { position: 6,  driver: drivers[5], team: t('mercedes'),     points: 90,  wins: 1, lastLapTime: '1:31.622', gap: '+1.203',  isFastestLap: false },
-  { position: 7,  driver: drivers[6], team: t('williams'),     points: 55,  wins: 0, lastLapTime: '1:31.789', gap: '+1.567',  isFastestLap: false },
-  { position: 8,  driver: drivers[7], team: t('aston-martin'), points: 42,  wins: 0, lastLapTime: '1:31.901', gap: '+1.890',  isFastestLap: false },
-  { position: 9,  driver: drivers[8], team: t('aston-martin'), points: 20,  wins: 0, lastLapTime: '1:32.045', gap: '+2.101',  isFastestLap: false },
-  { position: 10, driver: drivers[9], team: t('alpine'),       points: 15,  wins: 0, lastLapTime: '1:32.200', gap: '+2.334',  isFastestLap: false },
+  { position: 1,  driver: drivers[0], team: t('red-bull'),     points: 0, wins: 0, lastLapTime: '', gap: 'LEADER',  isFastestLap: false },
+  { position: 2,  driver: drivers[1], team: t('mclaren'),      points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 3,  driver: drivers[2], team: t('ferrari'),      points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 4,  driver: drivers[3], team: t('mclaren'),      points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 5,  driver: drivers[4], team: t('ferrari'),      points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 6,  driver: drivers[5], team: t('mercedes'),     points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 7,  driver: drivers[6], team: t('williams'),     points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 8,  driver: drivers[7], team: t('aston-martin'), points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 9,  driver: drivers[8], team: t('aston-martin'), points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
+  { position: 10, driver: drivers[9], team: t('alpine'),       points: 0, wins: 0, lastLapTime: '', gap: '',        isFastestLap: false },
 ]
 
-// ── Races (calendário mock) ────────────────────────────
+// ── Races (calendário 2026) ──────────────────────────
 export const races: Race[] = [
-  { id: 'bahrain',   name: 'GP do Bahrein',    circuit: 'Bahrain International Circuit', country: 'Bahrein',    date: '02 Mar 2025', round: 1 },
-  { id: 'jeddah',    name: 'GP da Arábia Saudita', circuit: 'Jeddah Corniche Circuit', country: 'Arábia Saudita', date: '09 Mar 2025', round: 2 },
-  { id: 'australia', name: 'GP da Austrália',   circuit: 'Albert Park Circuit',          country: 'Austrália',   date: '23 Mar 2025', round: 3 },
-  { id: 'japan',     name: 'GP do Japão',       circuit: 'Suzuka International Racing Course', country: 'Japão', date: '06 Abr 2025', round: 4 },
-  { id: 'china',     name: 'GP da China',       circuit: 'Shanghai International Circuit', country: 'China',     date: '20 Abr 2025', round: 5 },
-  { id: 'miami',     name: 'GP de Miami',       circuit: 'Miami International Autodrome', country: 'EUA',       date: '04 Mai 2025', round: 6 },
-  { id: 'monaco',    name: 'GP de Mônaco',      circuit: 'Circuit de Monaco',            country: 'Mônaco',     date: '25 Mai 2025', round: 7 },
-  { id: 'spain',     name: 'GP da Espanha',     circuit: 'Circuit de Barcelona-Catalunya', country: 'Espanha',  date: '01 Jun 2025', round: 8 },
+  { id: 'australia', name: 'GP da Austrália',         circuit: 'Albert Park Circuit',               country: 'Austrália',      date: '08 Mar 2026', round: 1 },
+  { id: 'china',     name: 'GP da China',             circuit: 'Shanghai International Circuit',    country: 'China',          date: '15 Mar 2026', round: 2 },
+  { id: 'japan',     name: 'GP do Japão',             circuit: 'Suzuka International Racing Course',country: 'Japão',          date: '29 Mar 2026', round: 3 },
+  { id: 'bahrain',   name: 'GP do Bahrein',           circuit: 'Bahrain International Circuit',     country: 'Bahrein',        date: '12 Abr 2026', round: 4 },
+  { id: 'jeddah',    name: 'GP da Arábia Saudita',    circuit: 'Jeddah Corniche Circuit',           country: 'Arábia Saudita', date: '19 Abr 2026', round: 5 },
+  { id: 'miami',     name: 'GP de Miami',             circuit: 'Miami International Autodrome',     country: 'EUA',            date: '03 Mai 2026', round: 6 },
+  { id: 'monaco',    name: 'GP de Mônaco',            circuit: 'Circuit de Monaco',                 country: 'Mônaco',         date: '24 Mai 2026', round: 7 },
+  { id: 'spain',     name: 'GP da Espanha',           circuit: 'Circuit de Madrid',                 country: 'Espanha',        date: '07 Jun 2026', round: 8 },
 ]
