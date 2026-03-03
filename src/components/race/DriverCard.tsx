@@ -9,12 +9,13 @@ interface DriverCardProps {
   className?: string
 }
 
+// Tyre colors sourced from tailwind.config.js `tyre.*` tokens
 const tyreColors: Record<string, string> = {
-  soft: '#E10600',
-  medium: '#F5C623',
-  hard: '#EBEBEB',
-  inter: '#43B02A',
-  wet: '#0072CE',
+  soft: '#E10600',     // tyre-soft
+  medium: '#F5C623',   // tyre-medium
+  hard: '#EBEBEB',     // tyre-hard
+  inter: '#43B02A',    // tyre-inter
+  wet: '#0072CE',      // tyre-wet
 }
 
 function TelemetryBar({ label, value, max, color, glow }: {
