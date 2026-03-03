@@ -1,0 +1,28 @@
+# ─────────────────────────────────────────────────────────
+# Middlewares Globais — Aplicáveis a qualquer projeto
+# ─────────────────────────────────────────────────────────
+
+http:
+  middlewares:
+    # Headers de segurança padrão para todos os projetos web
+    security-headers:
+      headers:
+        browserXssFilter: true
+        contentTypeNosniff: true
+        frameDeny: true
+        stsIncludeSubdomains: true
+        stsPreload: true
+        stsSeconds: 31536000
+        customFrameOptionsValue: "SAMEORIGIN"
+        referrerPolicy: "strict-origin-when-cross-origin"
+
+    # Rate limiting global (proteção básica contra abuse)
+    rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+        period: 1s
+
+    # Compressão (para projetos que não fazem gzip internamente)
+    compress:
+      compress: {}
