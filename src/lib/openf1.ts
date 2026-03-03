@@ -134,38 +134,54 @@ async function fetchApi<T>(endpoint: string, params: Record<string, string | num
 
 // ── Public API ─────────────────────────────────────────
 
+const CURRENT_YEAR = new Date().getFullYear()
+
 export function getLatestSession() {
   return fetchApi<OpenF1Session>('/sessions', { session_key: 'latest' })
 }
 
 /**
  * Fetch the most recent session with real data.
- * Prioritises 2026: first any session whose date_end is in the past (already
- * happened), then falls back to Race sessions from 2025/2024.
+ * Dynamically uses the current year so it always prioritises the ongoing season.
+ * Falls back to previous years only when the current year has no completed sessions.
  */
 export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
   const now = new Date()
 
-  // 1. Try 2026 — grab the most recent session that already ended
-  const all2026 = await fetchApi<OpenF1Session>('/sessions', { year: 2026 })
-  const past2026 = all2026.filter((s) => new Date(s.date_end) <= now)
-  if (past2026.length > 0) {
-    return past2026[past2026.length - 1]
+  // 1. Try current year — grab the most recent session that already ended
+  const allCurrent = await fetchApi<OpenF1Session>('/sessions', { year: CURRENT_YEAR })
+
+  if (allCurrent.length > 0) {
+    const pastCurrent = allCurrent.filter((s) => new Date(s.date_end) <= now)
+    if (pastCurrent.length > 0) {
+      console.info(`[OpenF1] Found ${pastCurrent.length} completed ${CURRENT_YEAR} session(s)`)
+      return pastCurrent[pastCurrent.length - 1]
+    }
+    console.info(`[OpenF1] ${CURRENT_YEAR} has ${allCurrent.length} session(s) but none completed yet (season starts soon)`)
+  } else {
+    console.warn(`[OpenF1] No ${CURRENT_YEAR} sessions found — API may not have data for this season yet`)
   }
 
-  // 2. Fallback: latest Race from 2025 / 2024
-  for (const year of [2025, 2024]) {
+  // 2. Fallback: latest Race from previous years
+  const fallbackYears = [CURRENT_YEAR - 1, CURRENT_YEAR - 2]
+  for (const year of fallbackYears) {
     const races = await fetchApi<OpenF1Session>('/sessions', {
       year,
       session_type: 'Race',
     })
     if (races.length > 0) {
+      console.info(`[OpenF1] Falling back to ${year} Race data (${races.length} races found)`)
       return races[races.length - 1]
     }
   }
 
-  // 3. Last resort: any session at all
-  if (all2026.length > 0) return all2026[all2026.length - 1]
+  // 3. Last resort: any upcoming session from current year (e.g. pre-season)
+  if (allCurrent.length > 0) {
+    console.info(`[OpenF1] Using upcoming ${CURRENT_YEAR} session as last resort`)
+    return allCurrent[0]
+  }
+
+  console.warn('[OpenF1] No sessions found in any year')
   return null
 }
 
