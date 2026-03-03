@@ -1,12 +1,17 @@
 services:
-  f1-pulse-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    container_name: f1-pulse-dev
-    volumes:
-      - .:/app
-      - /app/node_modules
-    ports:
-      - "3001:3001"
+  f1-pulse:
+    build: .
+    container_name: f1-pulse
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.f1-pulse.rule=Host(`f1.seudominio.com`)"
+      - "traefik.http.routers.f1-pulse.entrypoints=websecure"
+      - "traefik.http.routers.f1-pulse.tls.certresolver=letsencrypt"
+      - "traefik.http.services.f1-pulse.loadbalancer.server.port=80"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

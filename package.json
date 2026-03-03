@@ -16,8 +16,6 @@
     "lucide-react": "^0.575.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "recharts": "^3.7.0",
-    "socket.io-client": "^4.8.3",
     "tailwind-merge": "^3.5.0",
     "zustand": "^5.0.11"
   },
