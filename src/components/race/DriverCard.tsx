@@ -100,47 +100,47 @@ export function DriverCard({ standing, index = 0, className }: DriverCardProps) 
         )}
 
         {/* Main row — responsive: stack on mobile */}
-        <div className="flex flex-col gap-2 py-2.5 pl-4 pr-3 sm:flex-row sm:items-center sm:gap-3">
+        <div className="flex flex-col gap-1.5 py-2 pl-3 pr-2 sm:flex-row sm:items-center sm:gap-3 sm:py-2.5 sm:pl-4 sm:pr-3">
           {/* Top section: position + driver info */}
-          <div className="flex flex-1 items-center gap-3">
+          <div className="flex flex-1 items-center gap-2 sm:gap-3">
             {/* Position badge */}
             <motion.div
               layout
               className={cn(
-                'flex h-8 w-8 shrink-0 items-center justify-center rounded font-bold tabular-nums sm:h-9 sm:w-9',
+                'flex h-7 w-7 shrink-0 items-center justify-center rounded text-xs font-bold tabular-nums sm:h-9 sm:w-9 sm:text-base',
                 isLeader
                   ? 'bg-f1red text-white shadow-lg shadow-f1red/20'
                   : isPodium
                     ? 'bg-neutral-800 text-white'
-                    : 'bg-neutral-900/80 text-neutral-500 text-sm',
+                    : 'bg-neutral-900/80 text-neutral-500',
               )}
             >
               P{standing.position}
             </motion.div>
 
             {/* Driver number + name */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <div className="flex min-w-0 flex-1 items-center gap-1.5 sm:gap-3">
               <span
-                className="text-base font-extrabold tabular-nums opacity-25 sm:text-lg"
+                className="text-sm font-extrabold tabular-nums opacity-25 sm:text-lg"
                 style={{ color: standing.team.color }}
               >
                 {standing.driver.number}
               </span>
 
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <p className="truncate text-sm font-semibold leading-tight tracking-tight sm:text-base">
+                <div className="flex items-center gap-1.5">
+                  <p className="truncate text-xs font-semibold leading-tight tracking-tight sm:text-base">
                     {standing.driver.name}
                   </p>
                   {standing.tyre && (
                     <span
-                      className="inline-block h-3 w-3 shrink-0 rounded-full border border-neutral-700"
+                      className="inline-block h-2.5 w-2.5 shrink-0 rounded-full border border-neutral-700 sm:h-3 sm:w-3"
                       style={{ backgroundColor: tyreColors[standing.tyre] }}
                       title={standing.tyre.toUpperCase()}
                     />
                   )}
                 </div>
-                <div className="flex items-center gap-2 text-[10px] text-neutral-500">
+                <div className="flex items-center gap-1.5 text-[9px] text-neutral-500 sm:gap-2 sm:text-[10px]">
                   <span className="truncate">{standing.team.name}</span>
                   {standing.pitstops !== undefined && (
                     <span className="text-neutral-600">PIT {standing.pitstops}x</span>
@@ -152,7 +152,7 @@ export function DriverCard({ standing, index = 0, className }: DriverCardProps) 
             {/* Gap — always visible, compact on mobile */}
             {standing.gap && (
               <span className={cn(
-                'shrink-0 font-mono text-xs tabular-nums sm:hidden',
+                'shrink-0 font-mono text-[10px] tabular-nums sm:hidden',
                 standing.gap === 'LEADER' ? 'font-semibold text-f1red' : 'text-neutral-500',
               )}>
                 {standing.gap}
@@ -164,23 +164,23 @@ export function DriverCard({ standing, index = 0, className }: DriverCardProps) 
           {hasTelemetry && (
             <>
               {/* Mobile: compact inline telemetry */}
-              <div className="flex items-center gap-3 pl-11 text-[10px] sm:hidden">
-                <div className="flex items-center gap-1">
+              <div className="flex items-center gap-2 pl-9 text-[9px] sm:hidden">
+                <div className="flex items-center gap-0.5">
                   <Gauge className="h-2.5 w-2.5 text-neutral-600" />
                   <span className="font-mono font-semibold tabular-nums text-neutral-300">
                     {standing.telemetry!.speed}
                   </span>
-                  <span className="text-[8px] text-neutral-600">km/h</span>
+                  <span className="text-[7px] text-neutral-600">km/h</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-0.5">
                   <span className="text-neutral-600">RPM</span>
                   <span className="font-mono tabular-nums text-neutral-400">{standing.telemetry!.rpm}</span>
                 </div>
-                <span className="rounded bg-neutral-800 px-1 py-0.5 font-mono text-[9px] font-bold text-neutral-400">
+                <span className="rounded bg-neutral-800 px-1 py-0.5 font-mono text-[8px] font-bold text-neutral-400">
                   G{standing.telemetry!.gear}
                 </span>
                 {standing.telemetry!.drs && (
-                  <span className="rounded bg-green-900/40 px-1 py-0.5 text-[9px] font-bold text-green-400">DRS</span>
+                  <span className="rounded bg-green-900/40 px-1 py-0.5 text-[8px] font-bold text-green-400">DRS</span>
                 )}
               </div>
 
@@ -307,13 +307,13 @@ export function DriverCard({ standing, index = 0, className }: DriverCardProps) 
           </div>
 
           {/* Mobile: bottom row with lap time, gap, points */}
-          <div className="flex items-center justify-between pl-11 sm:hidden">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between pl-9 sm:hidden">
+            <div className="flex items-center gap-2">
               {standing.lastLapTime && (
-                <div className="relative flex items-center gap-1">
+                <div className="relative flex items-center gap-0.5">
                   <Timer className="h-2.5 w-2.5 text-neutral-600" />
                   <span className={cn(
-                    'relative z-10 font-mono text-[10px] font-medium tabular-nums',
+                    'relative z-10 font-mono text-[9px] font-medium tabular-nums',
                     standing.isFastestLap ? 'text-f1red' : 'text-neutral-400',
                   )}>
                     {standing.lastLapTime}
@@ -326,7 +326,7 @@ export function DriverCard({ standing, index = 0, className }: DriverCardProps) 
 
               {standing.telemetry && (
                 <span className={cn(
-                  'font-mono text-[10px] font-semibold tabular-nums',
+                  'font-mono text-[9px] font-semibold tabular-nums',
                   standing.telemetry.delta < 0 ? 'text-green-400' : 'text-f1red',
                 )}>
                   {standing.telemetry.delta > 0 ? '+' : ''}{standing.telemetry.delta.toFixed(3)}
@@ -335,8 +335,8 @@ export function DriverCard({ standing, index = 0, className }: DriverCardProps) 
             </div>
 
             <div className="flex items-center gap-1">
-              <span className="font-mono text-xs font-bold tabular-nums">{standing.points}</span>
-              <span className="text-[9px] text-neutral-600">PTS</span>
+              <span className="font-mono text-[11px] font-bold tabular-nums">{standing.points}</span>
+              <span className="text-[8px] text-neutral-600">PTS</span>
               {standing.wins > 0 && (
                 <Trophy className="h-2.5 w-2.5 text-amber-500" />
               )}

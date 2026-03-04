@@ -7,10 +7,10 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-neutral-800 bg-f1black/95 backdrop-blur supports-[backdrop-filter]:bg-f1black/80">
-      <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16">
+      <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-3 sm:h-16 sm:px-4">
         <div className="flex items-center gap-2">
-          <Activity className="h-5 w-5 text-f1red sm:h-6 sm:w-6" />
-          <span className="text-lg font-bold tracking-tight sm:text-xl">
+          <Activity className="h-4.5 w-4.5 text-f1red sm:h-6 sm:w-6" />
+          <span className="text-base font-bold tracking-tight sm:text-xl">
             F1 <span className="text-f1red">Pulse</span>
           </span>
         </div>
@@ -32,7 +32,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-f1red/10 px-2.5 py-1 text-[10px] font-medium text-f1red sm:px-3 sm:text-xs">
+          <span className="inline-flex items-center gap-1 rounded-full bg-f1red/10 px-2 py-0.5 text-[9px] font-medium text-f1red sm:gap-1.5 sm:px-3 sm:py-1 sm:text-xs">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-f1red" />
             LIVE
           </span>
@@ -58,7 +58,7 @@ export function Header() {
             transition={{ duration: 0.2 }}
             className="overflow-hidden border-t border-neutral-800 md:hidden"
           >
-            <div className="flex flex-col gap-1 px-4 py-3">
+            <div className="flex flex-col gap-0.5 px-3 py-2">
               {['Dashboard', 'Classificação', 'Corridas', 'Pilotos'].map((item, i) => (
                 <a
                   key={item}
