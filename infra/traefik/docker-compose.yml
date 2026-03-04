@@ -1,0 +1,41 @@
+# ─────────────────────────────────────────────────────────
+# Traefik — Reverse Proxy Global da VPS
+# Deploy: copiar para /opt/traefik/ na VPS Hostinger
+# ─────────────────────────────────────────────────────────
+
+services:
+  traefik:
+    image: traefik:v3.3
+    container_name: traefik
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Traefik precisa ler o Docker socket para detectar containers
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # Config estática
+      - ./traefik.yml:/traefik.yml:ro
+      # Config dinâmica (middlewares, etc)
+      - ./dynamic:/dynamic:ro
+      # Certificados SSL (Let's Encrypt)
+      - ./acme.json:/acme.json
+    networks:
+      - proxy
+    labels:
+      # Dashboard do Traefik (opcional — desabilite em produção se quiser)
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-dashboard.rule=Host(`traefik.seudominio.com`)"
+      - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefik-dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik-dashboard.service=api@internal"
+      # Protege o dashboard com autenticação básica
+      - "traefik.http.routers.traefik-dashboard.middlewares=auth"
+      # Gere o hash com: htpasswd -nB admin
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$2y$$10$$TROQUE_PELO_HASH_GERADO"
+
+networks:
+  proxy:
+    name: proxy
