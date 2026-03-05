@@ -1,11 +1,13 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from '@/components/layout/Layout'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
 const Standings = lazy(() => import('@/pages/Standings'))
 const Races = lazy(() => import('@/pages/Races'))
 const Drivers = lazy(() => import('@/pages/Drivers'))
+const NotFound = lazy(() => import('@/pages/NotFound'))
 
 function PageLoader() {
   return (
@@ -19,14 +21,17 @@ function App() {
   return (
     <BrowserRouter>
       <Layout>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/standings" element={<Standings />} />
-            <Route path="/races" element={<Races />} />
-            <Route path="/drivers" element={<Drivers />} />
-          </Routes>
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/standings" element={<Standings />} />
+              <Route path="/races" element={<Races />} />
+              <Route path="/drivers" element={<Drivers />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </Layout>
     </BrowserRouter>
   )
