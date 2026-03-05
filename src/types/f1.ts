@@ -33,6 +33,20 @@ export interface Race {
   results?: RaceResult[]
 }
 
+export interface TelemetryData {
+  speed: number
+  rpm: number
+  gear: number
+  throttle: number
+  brake: number
+  drs: boolean
+  delta: number
+}
+
+export type FlagStatus = 'green' | 'yellow' | 'red' | 'safety-car' | 'vsc'
+
+export type TrackCondition = 'dry' | 'damp' | 'wet'
+
 export interface Standing {
   position: number
   driver: Driver
@@ -42,6 +56,12 @@ export interface Standing {
   lastLapTime?: string
   gap?: string
   isFastestLap?: boolean
+  telemetry?: TelemetryData
+  tyre?: 'soft' | 'medium' | 'hard' | 'inter' | 'wet'
+  pitstops?: number
+  sector1?: number
+  sector2?: number
+  sector3?: number
 }
 
 export interface LapData {

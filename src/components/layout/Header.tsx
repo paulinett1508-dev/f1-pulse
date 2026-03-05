@@ -1,6 +1,15 @@
 import { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { Activity, Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/utils'
+
+const navItems = [
+  { label: 'Dashboard', to: '/' },
+  { label: 'Classificação', to: '/standings' },
+  { label: 'Corridas', to: '/races' },
+  { label: 'Pilotos', to: '/drivers' },
+]
 
 export function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -17,18 +26,18 @@ export function Header() {
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-          <a href="#" className="text-white transition-colors hover:text-f1red">
-            Dashboard
-          </a>
-          <a href="#" className="text-neutral-400 transition-colors hover:text-f1red">
-            Classificação
-          </a>
-          <a href="#" className="text-neutral-400 transition-colors hover:text-f1red">
-            Corridas
-          </a>
-          <a href="#" className="text-neutral-400 transition-colors hover:text-f1red">
-            Pilotos
-          </a>
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.to === '/'}
+              className={({ isActive }) =>
+                cn('transition-colors hover:text-f1red', isActive ? 'text-white' : 'text-neutral-400')
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
@@ -59,17 +68,23 @@ export function Header() {
             className="overflow-hidden border-t border-neutral-800 md:hidden"
           >
             <div className="flex flex-col gap-0.5 px-3 py-2">
-              {['Dashboard', 'Classificação', 'Corridas', 'Pilotos'].map((item, i) => (
-                <a
-                  key={item}
-                  href="#"
-                  className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                    i === 0 ? 'bg-neutral-800/50 text-white' : 'text-neutral-400 hover:bg-neutral-800/30 hover:text-white'
-                  }`}
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={item.to === '/'}
                   onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    cn(
+                      'rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                      isActive
+                        ? 'bg-neutral-800/50 text-white'
+                        : 'text-neutral-400 hover:bg-neutral-800/30 hover:text-white',
+                    )
+                  }
                 >
-                  {item}
-                </a>
+                  {item.label}
+                </NavLink>
               ))}
             </div>
           </motion.nav>

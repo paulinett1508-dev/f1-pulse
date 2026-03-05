@@ -23,7 +23,7 @@ function StatCard({ icon: Icon, label, value, accent }: {
   )
 }
 
-export function Dashboard() {
+export default function Dashboard() {
   const {
     standings,
     races,

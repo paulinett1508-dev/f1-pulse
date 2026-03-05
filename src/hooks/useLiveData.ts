@@ -15,7 +15,6 @@ import {
 import type {
   OpenF1Session,
   OpenF1Driver,
-  OpenF1CarData,
   OpenF1Position,
   OpenF1Interval,
   OpenF1Weather,
@@ -39,7 +38,7 @@ function parseDrs(drs: number | null): boolean {
   return drs !== null && [10, 12, 14].includes(drs)
 }
 
-function mapCarDataToTelemetry(data: OpenF1CarData): TelemetryData {
+function mapCarDataToTelemetry(data: { speed: number; rpm: number; n_gear: number; throttle: number; brake: number; drs: number | null }): TelemetryData {
   return {
     speed: data.speed,
     rpm: data.rpm,
@@ -82,6 +81,12 @@ function mapTrackCondition(weather: OpenF1Weather | undefined): TrackCondition {
   return 'dry'
 }
 
+function formatLapTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60)
+  const secs = (seconds % 60).toFixed(3)
+  return `${mins}:${secs.padStart(6, '0')}`
+}
+
 // ── Hook ───────────────────────────────────────────────
 
 export interface LiveDataStatus {
@@ -107,67 +112,34 @@ export function useLiveData(enabled = true) {
   const sessionKeyRef = useRef<number | null>(null)
   const driversMapRef = useRef<Map<number, OpenF1Driver>>(new Map())
 
-  // ── Bootstrap: fetch session + drivers ───────────────
-  const bootstrap = useCallback(async () => {
+  // ── Fetch weather ────────────────────────────────────
+  const fetchWeather = useCallback(async (sessionKey: number) => {
     try {
-      // Prefer a recent session from the current season; falls back to prior years
-      const recentRace = await getRecentRaceSession()
-      const session = recentRace ?? (await getLatestSession())[0] ?? null
-      if (!session) {
-        setStatus((s) => ({ ...s, error: 'Nenhuma sessão encontrada', dataSource: 'none' }))
-        return false
+      const weather = await getWeather(sessionKey)
+      if (weather.length > 0) {
+        const latest = weather[weather.length - 1]
+        useF1Store.setState({
+          airTemp: Math.round(latest.air_temperature),
+          trackTemp: Math.round(latest.track_temperature),
+          trackCondition: mapTrackCondition(latest),
+        })
       }
-
-      sessionKeyRef.current = session.session_key
-
-      // Check if the session is live or recently ended (< 2 hours)
-      const sessionEnd = new Date(session.date_end)
-      const now = new Date()
-      const hoursSinceEnd = (now.getTime() - sessionEnd.getTime()) / (1000 * 60 * 60)
-      const dataSource = hoursSinceEnd < 0 ? 'live' : hoursSinceEnd < 2 ? 'recent' : 'recent'
-
-      setStatus((s) => ({
-        ...s,
-        sessionInfo: session,
-        isConnected: true,
-        error: null,
-        dataSource,
-      }))
-
-      store.setIsLive(dataSource === 'live')
-
-      // Fetch drivers for this session
-      const driversList = await getDrivers(session.session_key)
-      const dMap = new Map<number, OpenF1Driver>()
-      for (const d of driversList) {
-        dMap.set(d.driver_number, d)
-      }
-      driversMapRef.current = dMap
-
-      // Build initial drivers and standings from API driver list
-      const apiDrivers = driversList.map((d) => ({
-        id: d.name_acronym,
-        name: d.full_name,
-        number: d.driver_number,
-        team: d.team_name.toLowerCase().replace(/\s+/g, '-'),
-        country: d.country_code ?? '',
-        photo: d.headshot_url ?? undefined,
-      }))
-      store.setDrivers(apiDrivers)
-
-      // Fetch initial positions
-      await fetchPositions(session.session_key, driversList)
-
-      // Fetch initial weather
-      await fetchWeather(session.session_key)
-
-      return true
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Erro ao conectar'
-      setStatus((s) => ({ ...s, error: msg, isConnected: false }))
-      return false
+    } catch {
+      // Silently fail
     }
-  }, [store])
+  }, [])
+
+  // ── Fetch race control (flags) ───────────────────────
+  const fetchRaceControl = useCallback(async (sessionKey: number) => {
+    try {
+      const messages = await getRaceControl(sessionKey)
+      if (messages.length > 0) {
+        useF1Store.setState({ flagStatus: mapFlag(messages) })
+      }
+    } catch {
+      // Silently fail
+    }
+  }, [])
 
   // ── Fetch positions + intervals + stints + laps ──────
   const fetchPositions = useCallback(async (sessionKey: number, driversList?: OpenF1Driver[]) => {
@@ -383,34 +355,67 @@ export function useLiveData(enabled = true) {
     }
   }, [store])
 
-  // ── Fetch weather ────────────────────────────────────
-  const fetchWeather = useCallback(async (sessionKey: number) => {
+  // ── Bootstrap: fetch session + drivers ───────────────
+  const bootstrap = useCallback(async () => {
     try {
-      const weather = await getWeather(sessionKey)
-      if (weather.length > 0) {
-        const latest = weather[weather.length - 1]
-        useF1Store.setState({
-          airTemp: Math.round(latest.air_temperature),
-          trackTemp: Math.round(latest.track_temperature),
-          trackCondition: mapTrackCondition(latest),
-        })
+      // Prefer a recent session from the current season; falls back to prior years
+      const recentRace = await getRecentRaceSession()
+      const session = recentRace ?? (await getLatestSession())[0] ?? null
+      if (!session) {
+        setStatus((s) => ({ ...s, error: 'Nenhuma sessão encontrada', dataSource: 'none' }))
+        return false
       }
-    } catch {
-      // Silently fail
-    }
-  }, [])
 
-  // ── Fetch race control (flags) ───────────────────────
-  const fetchRaceControl = useCallback(async (sessionKey: number) => {
-    try {
-      const messages = await getRaceControl(sessionKey)
-      if (messages.length > 0) {
-        useF1Store.setState({ flagStatus: mapFlag(messages) })
+      sessionKeyRef.current = session.session_key
+
+      // Check if the session is live or recently ended (< 2 hours)
+      const sessionEnd = new Date(session.date_end)
+      const now = new Date()
+      const hoursSinceEnd = (now.getTime() - sessionEnd.getTime()) / (1000 * 60 * 60)
+      const dataSource = hoursSinceEnd < 0 ? 'live' : 'recent'
+
+      setStatus((s) => ({
+        ...s,
+        sessionInfo: session,
+        isConnected: true,
+        error: null,
+        dataSource,
+      }))
+
+      store.setIsLive(dataSource === 'live')
+
+      // Fetch drivers for this session
+      const driversList = await getDrivers(session.session_key)
+      const dMap = new Map<number, OpenF1Driver>()
+      for (const d of driversList) {
+        dMap.set(d.driver_number, d)
       }
-    } catch {
-      // Silently fail
+      driversMapRef.current = dMap
+
+      // Build initial drivers and standings from API driver list
+      const apiDrivers = driversList.map((d) => ({
+        id: d.name_acronym,
+        name: d.full_name,
+        number: d.driver_number,
+        team: d.team_name.toLowerCase().replace(/\s+/g, '-'),
+        country: d.country_code ?? '',
+        photo: d.headshot_url ?? undefined,
+      }))
+      store.setDrivers(apiDrivers)
+
+      // Fetch initial positions
+      await fetchPositions(session.session_key, driversList)
+
+      // Fetch initial weather
+      await fetchWeather(session.session_key)
+
+      return true
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Erro ao conectar'
+      setStatus((s) => ({ ...s, error: msg, isConnected: false }))
+      return false
     }
-  }, [])
+  }, [store, fetchPositions, fetchWeather])
 
   // ── Main effect: bootstrap + start polling ───────────
   useEffect(() => {
@@ -465,12 +470,4 @@ export function useLiveData(enabled = true) {
   }, [enabled, bootstrap, fetchTelemetry, fetchLeaderTelemetry, fetchPositions, fetchWeather, fetchRaceControl])
 
   return status
-}
-
-// ── Utils ──────────────────────────────────────────────
-
-function formatLapTime(seconds: number): string {
-  const mins = Math.floor(seconds / 60)
-  const secs = (seconds % 60).toFixed(3)
-  return `${mins}:${secs.padStart(6, '0')}`
 }
