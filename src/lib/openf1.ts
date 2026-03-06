@@ -145,6 +145,12 @@ export function getLatestSession() {
  * Dynamically uses the current year so it always prioritises the ongoing season.
  * Falls back to previous years only when the current year has no completed sessions.
  */
+/**
+ * Fetch the most recent session with real data.
+ * Considers both Race and Sprint sessions so Sprint weekends are supported.
+ * Dynamically uses the current year so it always prioritises the ongoing season.
+ * Falls back to previous years only when the current year has no completed sessions.
+ */
 export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
   const now = new Date()
 
@@ -152,6 +158,17 @@ export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
   const allCurrent = await fetchApi<OpenF1Session>('/sessions', { year: CURRENT_YEAR })
 
   if (allCurrent.length > 0) {
+    // Prefer Race or Sprint sessions (the ones with competitive results)
+    const competitive = allCurrent.filter(
+      (s) => s.session_type === 'Race' || s.session_type === 'Sprint',
+    )
+    const pastCompetitive = competitive.filter((s) => new Date(s.date_end) <= now)
+    if (pastCompetitive.length > 0) {
+      console.info(`[OpenF1] Found ${pastCompetitive.length} completed Race/Sprint ${CURRENT_YEAR} session(s)`)
+      return pastCompetitive[pastCompetitive.length - 1]
+    }
+
+    // Fall back to any completed session (qualifying, practice, etc.)
     const pastCurrent = allCurrent.filter((s) => new Date(s.date_end) <= now)
     if (pastCurrent.length > 0) {
       console.info(`[OpenF1] Found ${pastCurrent.length} completed ${CURRENT_YEAR} session(s)`)
@@ -162,7 +179,7 @@ export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
     console.warn(`[OpenF1] No ${CURRENT_YEAR} sessions found — API may not have data for this season yet`)
   }
 
-  // 2. Fallback: latest Race from previous years
+  // 2. Fallback: latest Race or Sprint from previous years
   const fallbackYears = [CURRENT_YEAR - 1, CURRENT_YEAR - 2]
   for (const year of fallbackYears) {
     const races = await fetchApi<OpenF1Session>('/sessions', {
@@ -183,6 +200,14 @@ export async function getRecentRaceSession(): Promise<OpenF1Session | null> {
 
   console.warn('[OpenF1] No sessions found in any year')
   return null
+}
+
+/**
+ * Fetch all sessions for a given meeting (race weekend).
+ * Useful to detect Sprint weekends and show the full session timeline.
+ */
+export function getMeetingSessions(meetingKey: number) {
+  return fetchApi<OpenF1Session>('/sessions', { meeting_key: meetingKey })
 }
 
 export function getDrivers(sessionKey: number | 'latest') {

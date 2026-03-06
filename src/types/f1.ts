@@ -23,6 +23,14 @@ export interface RaceResult {
   fastestLap?: boolean
 }
 
+export type SessionType = 'practice' | 'qualifying' | 'sprint-shootout' | 'sprint' | 'race'
+
+export interface RaceSession {
+  type: SessionType
+  date: string
+  label: string
+}
+
 export interface Race {
   id: string
   name: string
@@ -30,6 +38,8 @@ export interface Race {
   country: string
   date: string
   round: number
+  hasSprint?: boolean
+  sessions?: RaceSession[]
   results?: RaceResult[]
 }
 
