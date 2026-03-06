@@ -71,14 +71,18 @@ function sprintSessions(fri: string, sat: string, sun: string): Race['sessions']
   ]
 }
 
+// ── Track layout images (F1 official CDN) ──────────
+const trackImg = (name: string) =>
+  `https://media.formula1.com/image/upload/f_auto,c_limit,q_75,w_1320/content/dam/fom-website/2018-redesign-assets/Circuit%20Diagrams%2016x9/${name}_Circuit.png`
+
 // ── Races (calendário 2026) ──────────────────────────
 export const races: Race[] = [
-  { id: 'australia', name: 'GP da Austrália',         circuit: 'Albert Park Circuit',               country: 'Austrália',      date: '08 Mar 2026', round: 1,  hasSprint: false, sessions: stdSessions('06 Mar 2026', '07 Mar 2026', '08 Mar 2026') },
-  { id: 'china',     name: 'GP da China',             circuit: 'Shanghai International Circuit',    country: 'China',          date: '15 Mar 2026', round: 2,  hasSprint: true,  sessions: sprintSessions('13 Mar 2026', '14 Mar 2026', '15 Mar 2026') },
-  { id: 'japan',     name: 'GP do Japão',             circuit: 'Suzuka International Racing Course',country: 'Japão',          date: '29 Mar 2026', round: 3,  hasSprint: false, sessions: stdSessions('27 Mar 2026', '28 Mar 2026', '29 Mar 2026') },
-  { id: 'bahrain',   name: 'GP do Bahrein',           circuit: 'Bahrain International Circuit',     country: 'Bahrein',        date: '12 Abr 2026', round: 4,  hasSprint: false, sessions: stdSessions('10 Abr 2026', '11 Abr 2026', '12 Abr 2026') },
-  { id: 'jeddah',    name: 'GP da Arábia Saudita',    circuit: 'Jeddah Corniche Circuit',           country: 'Arábia Saudita', date: '19 Abr 2026', round: 5,  hasSprint: false, sessions: stdSessions('17 Abr 2026', '18 Abr 2026', '19 Abr 2026') },
-  { id: 'miami',     name: 'GP de Miami',             circuit: 'Miami International Autodrome',     country: 'EUA',            date: '03 Mai 2026', round: 6,  hasSprint: true,  sessions: sprintSessions('01 Mai 2026', '02 Mai 2026', '03 Mai 2026') },
-  { id: 'monaco',    name: 'GP de Mônaco',            circuit: 'Circuit de Monaco',                 country: 'Mônaco',         date: '24 Mai 2026', round: 7,  hasSprint: false, sessions: stdSessions('22 Mai 2026', '23 Mai 2026', '24 Mai 2026') },
-  { id: 'spain',     name: 'GP da Espanha',           circuit: 'Circuit de Madrid',                 country: 'Espanha',        date: '07 Jun 2026', round: 8,  hasSprint: false, sessions: stdSessions('05 Jun 2026', '06 Jun 2026', '07 Jun 2026') },
+  { id: 'australia', name: 'GP da Austrália',         circuit: 'Albert Park Circuit',               country: 'Austrália',      date: '08 Mar 2026', round: 1,  hasSprint: false, trackImg: trackImg('Australia'),      sessions: stdSessions('06 Mar 2026', '07 Mar 2026', '08 Mar 2026') },
+  { id: 'china',     name: 'GP da China',             circuit: 'Shanghai International Circuit',    country: 'China',          date: '15 Mar 2026', round: 2,  hasSprint: true,  trackImg: trackImg('China'),          sessions: sprintSessions('13 Mar 2026', '14 Mar 2026', '15 Mar 2026') },
+  { id: 'japan',     name: 'GP do Japão',             circuit: 'Suzuka International Racing Course',country: 'Japão',          date: '29 Mar 2026', round: 3,  hasSprint: false, trackImg: trackImg('Japan'),          sessions: stdSessions('27 Mar 2026', '28 Mar 2026', '29 Mar 2026') },
+  { id: 'bahrain',   name: 'GP do Bahrein',           circuit: 'Bahrain International Circuit',     country: 'Bahrein',        date: '12 Abr 2026', round: 4,  hasSprint: false, trackImg: trackImg('Bahrain'),        sessions: stdSessions('10 Abr 2026', '11 Abr 2026', '12 Abr 2026') },
+  { id: 'jeddah',    name: 'GP da Arábia Saudita',    circuit: 'Jeddah Corniche Circuit',           country: 'Arábia Saudita', date: '19 Abr 2026', round: 5,  hasSprint: false, trackImg: trackImg('Saudi%20Arabia'), sessions: stdSessions('17 Abr 2026', '18 Abr 2026', '19 Abr 2026') },
+  { id: 'miami',     name: 'GP de Miami',             circuit: 'Miami International Autodrome',     country: 'EUA',            date: '03 Mai 2026', round: 6,  hasSprint: true,  trackImg: trackImg('Miami'),          sessions: sprintSessions('01 Mai 2026', '02 Mai 2026', '03 Mai 2026') },
+  { id: 'monaco',    name: 'GP de Mônaco',            circuit: 'Circuit de Monaco',                 country: 'Mônaco',         date: '24 Mai 2026', round: 7,  hasSprint: false, trackImg: trackImg('Monaco'),         sessions: stdSessions('22 Mai 2026', '23 Mai 2026', '24 Mai 2026') },
+  { id: 'spain',     name: 'GP da Espanha',           circuit: 'Circuit de Madrid',                 country: 'Espanha',        date: '07 Jun 2026', round: 8,  hasSprint: false, trackImg: trackImg('Spain'),          sessions: stdSessions('05 Jun 2026', '06 Jun 2026', '07 Jun 2026') },
 ]
