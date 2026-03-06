@@ -33,18 +33,17 @@ export function RaceCard({ race, status, className }: RaceCardProps) {
   return (
     <div
       className={cn('group [perspective:1000px]', className)}
-      style={{ minHeight: 180 }}
     >
       <div
         onClick={() => hasTrackImg && setFlipped((f) => !f)}
         className={cn(
-          'relative h-full w-full transition-transform duration-500 [transform-style:preserve-3d]',
+          'relative transition-transform duration-500 [transform-style:preserve-3d]',
           hasTrackImg && 'cursor-pointer',
           flipped && '[transform:rotateY(180deg)]',
         )}
       >
         {/* ── Front face ── */}
-        <div className="absolute inset-0 rounded-xl border border-neutral-800 bg-neutral-900/50 p-4 [backface-visibility:hidden] transition-colors hover:border-neutral-700">
+        <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-4 [backface-visibility:hidden] transition-colors hover:border-neutral-700">
           <div className="mb-3 flex items-start justify-between">
             <div>
               <div className="flex items-center gap-2">
