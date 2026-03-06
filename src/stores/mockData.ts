@@ -18,17 +18,20 @@ export const teams: Team[] = [
 const t = (id: string) => teams.find((team) => team.id === id)!
 
 // ── Drivers (2026 season) ─────────────────────────────
+// Photos from the official F1 media CDN (public headshots)
+const f1Img = (slug: string) => `https://media.formula1.com/image/upload/f_auto,c_limit,q_auto,w_300/content/dam/fom-website/drivers/2025Drivers/${slug}`
+
 export const drivers: Driver[] = [
-  { id: 'VER', name: 'Max Verstappen',    number: 1,  team: 'red-bull',     country: 'NED' },
-  { id: 'NOR', name: 'Lando Norris',      number: 4,  team: 'mclaren',      country: 'GBR' },
-  { id: 'LEC', name: 'Charles Leclerc',   number: 16, team: 'ferrari',      country: 'MON' },
-  { id: 'PIA', name: 'Oscar Piastri',     number: 81, team: 'mclaren',      country: 'AUS' },
-  { id: 'HAM', name: 'Lewis Hamilton',    number: 44, team: 'ferrari',      country: 'GBR' },
-  { id: 'RUS', name: 'George Russell',    number: 63, team: 'mercedes',     country: 'GBR' },
-  { id: 'SAI', name: 'Carlos Sainz',      number: 55, team: 'williams',     country: 'ESP' },
-  { id: 'ALO', name: 'Fernando Alonso',   number: 14, team: 'aston-martin', country: 'ESP' },
-  { id: 'STR', name: 'Lance Stroll',      number: 18, team: 'aston-martin', country: 'CAN' },
-  { id: 'GAS', name: 'Pierre Gasly',      number: 10, team: 'alpine',       country: 'FRA' },
+  { id: 'VER', name: 'Max Verstappen',    number: 1,  team: 'red-bull',     country: 'NED', photo: f1Img('vermax01.png') },
+  { id: 'NOR', name: 'Lando Norris',      number: 4,  team: 'mclaren',      country: 'GBR', photo: f1Img('norlan01.png') },
+  { id: 'LEC', name: 'Charles Leclerc',   number: 16, team: 'ferrari',      country: 'MON', photo: f1Img('leccha01.png') },
+  { id: 'PIA', name: 'Oscar Piastri',     number: 81, team: 'mclaren',      country: 'AUS', photo: f1Img('piaosc01.png') },
+  { id: 'HAM', name: 'Lewis Hamilton',    number: 44, team: 'ferrari',      country: 'GBR', photo: f1Img('hamlew01.png') },
+  { id: 'RUS', name: 'George Russell',    number: 63, team: 'mercedes',     country: 'GBR', photo: f1Img('rusgeo01.png') },
+  { id: 'SAI', name: 'Carlos Sainz',      number: 55, team: 'williams',     country: 'ESP', photo: f1Img('saicar01.png') },
+  { id: 'ALO', name: 'Fernando Alonso',   number: 14, team: 'aston-martin', country: 'ESP', photo: f1Img('alofer01.png') },
+  { id: 'STR', name: 'Lance Stroll',      number: 18, team: 'aston-martin', country: 'CAN', photo: f1Img('strlan01.png') },
+  { id: 'GAS', name: 'Pierre Gasly',      number: 10, team: 'alpine',       country: 'FRA', photo: f1Img('gaspie01.png') },
 ]
 
 // ── Standings (mock — início de temporada, sem pontos) ─
