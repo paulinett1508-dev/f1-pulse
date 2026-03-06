@@ -12,15 +12,21 @@ Configuração existente:
 
 ## 1. Onde encontrar a URL do deploy
 
-### URL padrão da Vercel
+### URL de produção
 
-Após o deploy, a Vercel gera automaticamente URLs nestes padrões:
+```
+https://f1-pulse-eight.vercel.app
+```
 
-| Tipo | Formato | Exemplo |
-|------|---------|---------|
-| Produção | `<projeto>.vercel.app` | `f1-pulse.vercel.app` |
-| Preview (por branch) | `<projeto>-git-<branch>-<usuario>.vercel.app` | `f1-pulse-git-dev-seu-user.vercel.app` |
-| Preview (por commit) | `<projeto>-<hash>-<usuario>.vercel.app` | `f1-pulse-abc123-seu-user.vercel.app` |
+> **Nota:** A Vercel pode adicionar um sufixo (como `-eight`) quando o nome do projeto já existe na plataforma.
+
+### Padrões de URL da Vercel
+
+| Tipo | Exemplo |
+|------|---------|
+| Produção | `f1-pulse-eight.vercel.app` |
+| Preview (por branch) | `f1-pulse-eight-git-<branch>-<usuario>.vercel.app` |
+| Preview (por commit) | `f1-pulse-eight-<hash>-<usuario>.vercel.app` |
 
 ### Como achar no Dashboard
 

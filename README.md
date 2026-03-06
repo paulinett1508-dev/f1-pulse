@@ -33,10 +33,10 @@ npm run preview
 
 ### Vercel (produção)
 
-O projeto está hospedado na Vercel. A URL de produção segue o padrão:
+O projeto está hospedado na Vercel. URL de produção:
 
 ```
-https://f1-pulse.vercel.app
+https://f1-pulse-eight.vercel.app
 ```
 
 - Push na `main` faz deploy automático
