@@ -39,6 +39,7 @@ export interface Race {
   date: string
   round: number
   hasSprint?: boolean
+  trackImg?: string
   sessions?: RaceSession[]
   results?: RaceResult[]
 }

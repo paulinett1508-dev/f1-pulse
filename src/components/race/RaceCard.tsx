@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { MapPin, Calendar, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/Badge'
@@ -25,10 +26,21 @@ const sessionIcon: Partial<Record<SessionType, string>> = {
 
 export function RaceCard({ race, status, className }: RaceCardProps) {
   const config = statusConfig[status]
+  const [imgError, setImgError] = useState(false)
 
   return (
-    <div className={cn('rounded-xl border border-neutral-800 bg-neutral-900/50 p-4 transition-colors hover:border-neutral-700', className)}>
-      <div className="mb-3 flex items-start justify-between">
+    <div className={cn('relative overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900/50 p-4 transition-colors hover:border-neutral-700', className)}>
+      {/* Track layout watermark */}
+      {race.trackImg && !imgError && (
+        <img
+          src={race.trackImg}
+          alt={`Traçado ${race.circuit}`}
+          onError={() => setImgError(true)}
+          className="pointer-events-none absolute -right-4 -top-2 h-36 w-36 object-contain opacity-[0.07] sm:h-44 sm:w-44"
+        />
+      )}
+
+      <div className="relative mb-3 flex items-start justify-between">
         <div>
           <div className="flex items-center gap-2">
             <p className="text-xs font-medium uppercase text-neutral-500">Round {race.round}</p>
@@ -44,7 +56,7 @@ export function RaceCard({ race, status, className }: RaceCardProps) {
         <Badge variant={config.variant}>{config.label}</Badge>
       </div>
 
-      <div className="flex flex-col gap-2 text-sm text-neutral-400">
+      <div className="relative flex flex-col gap-2 text-sm text-neutral-400">
         <div className="flex items-center gap-2">
           <MapPin className="h-3.5 w-3.5" />
           <span>{race.circuit}, {race.country}</span>
@@ -57,7 +69,7 @@ export function RaceCard({ race, status, className }: RaceCardProps) {
 
       {/* Session timeline */}
       {race.sessions && race.sessions.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-1.5 border-t border-neutral-800/60 pt-3">
+        <div className="relative mt-3 flex flex-wrap gap-1.5 border-t border-neutral-800/60 pt-3">
           {race.sessions.map((session, i) => {
             const icon = sessionIcon[session.type] ?? '?'
             const isSprint = session.type === 'sprint' || session.type === 'sprint-shootout'
