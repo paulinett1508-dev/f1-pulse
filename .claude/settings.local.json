@@ -8,7 +8,8 @@
       "mcp__Vercel__list_deployments",
       "mcp__Vercel__search_vercel_documentation",
       "mcp__Vercel__web_fetch_vercel_url",
-      "mcp__Vercel__get_project"
+      "mcp__Vercel__get_project",
+      "mcp__Vercel__check_domain_availability_and_price"
     ]
   }
 }
