@@ -5,7 +5,12 @@
       "Bash(npx vite build 2>&1 | tail -20)",
       "mcp__Vercel__deploy_to_vercel",
       "mcp__Vercel__get_deployment",
-      "mcp__Vercel__list_deployments"
+      "mcp__Vercel__list_deployments",
+      "mcp__Vercel__search_vercel_documentation",
+      "mcp__Vercel__web_fetch_vercel_url",
+      "mcp__Vercel__get_project",
+      "mcp__Vercel__check_domain_availability_and_price",
+      "mcp__Vercel__get_deployment_build_logs"
     ]
   }
 }
