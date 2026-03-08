@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc --noEmit 2>&1 | head -50)",
-      "Bash(npx vite build 2>&1 | tail -20)"
+      "Bash(npx vite build 2>&1 | tail -20)",
+      "mcp__Vercel__deploy_to_vercel",
+      "mcp__Vercel__get_deployment",
+      "mcp__Vercel__list_deployments"
     ]
   }
 }
